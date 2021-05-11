@@ -7,22 +7,43 @@ const Dynamo = {
     const params = {
       TableName,
       Key: {
-        ID,
-      },
+        ID
+      }
     };
 
-    const data = await documentClient
-    .get(params)
-    .promise()
+    const data = await documentClient.get(params).promise();
 
-    if(!data || !data.Item){
-        throw Error (`There was an error fetching the data for ID of ${ID} from ${TableName}`)
+    if (!data || !data.Item) {
+      throw Error(
+        `There was an error fetching the data for ID of ${ID} from ${TableName}`
+      );
     }
 
     console.log(data);
 
     return data.Item;
+  },
+
+  async write(data, TableName) {
+    if (!data.ID) {
+      throw Error("no ID on the Data");
+    }
+
+    const params = {
+      TableName,
+      Item: data
+    };
+
+    const res = await documentClient.put(params).promise();
+
+    if (!res) {
+      throw Error(
+        `There was an error inserting ID of ${data.ID} into ${TableName}`
+      );
+    }
+
+    return data;
   }
 };
 
-module.exports = Dynamo; 
+module.exports = Dynamo;
