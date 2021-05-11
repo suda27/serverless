@@ -11,18 +11,38 @@ provider:
     tableName: ${self:custom.tableName}
     bucketName: ${self:custom.bucketName}
   iamRoleStatements:
-      - Effect: Allow
-        Action: 
-            - dynamodb:*
-            - s3:*
-        Resource:  '*'
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+        - s3:*
+      Resource: "*"
+  apiKeys:
+    - free:
+        - myFreeApiKey
+    - paid:
+        - myPaidApiKey
+  usagePlan:
+    - free:
+        quota:
+          limit: 1000
+          period: MONTH
+        throttle:
+          rateLimit: 5
+          burstLimit: 20
+    - paid:
+        quota:
+          limit: 10000
+          period: MONTH
+        throttle:
+          rateLimit: 50
+          burstLimit: 200
 
 plugins:
   - serverless-s3-sync
   - serverless-webpack
 
 package:
-    individually: true  
+  individually: true
 
 custom:
   tableName: player-points
@@ -30,7 +50,6 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.bucketName}
       localDir: UploadData
-
 
 # you can overwrite defaults here
 #  stage: dev
@@ -68,44 +87,43 @@ functions:
   getUser:
     handler: lambdas/endpoints/getUser.handler
     events:
-     - http:
-         path: get-user/{ID}
-         method: GET
-         cors:  true
+      - http:
+          path: get-user/{ID}
+          method: GET
+          cors: true
+          private: true
 
   getPlayerScore:
     handler: lambdas/endpoints/getPlayerScore.handler
     events:
-     - http:
-         path: get-player-score/{ID}
-         method: GET
-         cors:  true  
-         
+      - http:
+          path: get-player-score/{ID}
+          method: GET
+          cors: true
+
   createPlayerScore:
     handler: lambdas/endpoints/createPlayerScore.handler
     events:
-     - http:
-         path: create-player-score/{ID}
-         method: POST
-         cors:  true
-         
-         
+      - http:
+          path: create-player-score/{ID}
+          method: POST
+          cors: true
+
   createFile:
     handler: lambdas/endpoints/createFile.handler
     events:
-     - http:
-         path: create-file/{fileName}
-         method: POST
-         cors:  true
-         
-         
+      - http:
+          path: create-file/{fileName}
+          method: POST
+          cors: true
+
   getFile:
     handler: lambdas/endpoints/getFile.handler
     events:
-     - http:
-         path: get-file/{fileName}
-         method: GET
-         cors:  true       
+      - http:
+          path: get-file/{fileName}
+          method: GET
+          cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -155,16 +173,15 @@ resources:
         BucketName: myserverlessproject-uploadbucket-suda
     MyDyanmoDBTable:
       Type: AWS::DynamoDB::Table
-      Properties:    
+      Properties:
         TableName: ${self:custom.tableName}
         AttributeDefinitions:
           - AttributeName: ID
             AttributeType: S
         KeySchema:
-          - AttributeName: ID  
+          - AttributeName: ID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-
         #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
