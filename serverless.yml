@@ -9,10 +9,12 @@ provider:
   region: us-east-1
   environment:
     tableName: ${self:custom.tableName}
+    bucketName: ${self:custom.bucketName}
   iamRoleStatements:
       - Effect: Allow
         Action: 
             - dynamodb:*
+            - s3:*
         Resource:  '*'
 
 plugins:
@@ -24,8 +26,9 @@ package:
 
 custom:
   tableName: player-points
+  bucketName: myserverlessproject-uploadbucket-suda
   s3Sync:
-    - bucketName: myserverlessproject-uploadbucket-suda
+    - bucketName: ${self:custom.bucketName}
       localDir: UploadData
 
 
@@ -84,6 +87,24 @@ functions:
      - http:
          path: create-player-score/{ID}
          method: POST
+         cors:  true
+         
+         
+  createFile:
+    handler: lambdas/endpoints/createFile.handler
+    events:
+     - http:
+         path: create-file/{fileName}
+         method: POST
+         cors:  true
+         
+         
+  getFile:
+    handler: lambdas/endpoints/getFile.handler
+    events:
+     - http:
+         path: get-file/{fileName}
+         method: GET
          cors:  true       
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
