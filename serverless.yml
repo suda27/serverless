@@ -124,6 +124,20 @@ functions:
           path: get-file/{fileName}
           method: GET
           cors: true
+
+  proxy:
+    handler: lambdas/endpoints/proxy.handler
+    events:
+      - http:
+          path: chuck-norris/{proxy+}
+          method: ANY
+          integration: http-proxy
+          request:
+            uri: http://api.icndb.com/{proxy}
+            parameters:
+              paths:
+                proxy: true
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
