@@ -147,15 +147,6 @@ functions:
           method: POST
           cors: true
 
-
-
-
-
-
-
-
-
-
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -214,6 +205,23 @@ resources:
           - AttributeName: ID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+    myAssumeRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: myAssumeRole
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+                  - apigateway.amazonaws.com
+              Action:
+                - sts:AssumeRole
+
+
+                
         #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
