@@ -15,6 +15,7 @@ provider:
       Action:
         - dynamodb:*
         - s3:*
+        - ses:*
       Resource: "*"
   apiKeys:
     - free:
@@ -137,6 +138,23 @@ functions:
             parameters:
               paths:
                 proxy: true
+
+  sendEmail:
+    handler: lambdas/endpoints/sendEmail.handler
+    events:
+      - http:
+          path: send-email
+          method: POST
+          cors: true
+
+
+
+
+
+
+
+
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
