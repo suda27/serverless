@@ -1,5 +1,5 @@
-service: serverless-sns-tutorial
-frameworkVersion: "2"
+service: serverless-comprehend-tutorial
+# frameworkVersion: "2"
 
 provider:
   name: aws
@@ -10,16 +10,15 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - sns:SetSMSAttributes
-        - sns:Publish
+        - comprehend:*
       Resource: "*"
 
 functions:
-  sendSMS:
-    handler: lambdas/endpoints/sendSMS.handler
+  analyse:
+    handler: lambdas/endpoints/analyse.handler
     events:
       - http:
-          path: send-sms
+          path: analyse
           method: POST
           cors: true
 
