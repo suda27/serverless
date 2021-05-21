@@ -137,7 +137,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.imageUploadBucket}
-        AccessControl: PublicRead
+         
     
     MyDyanmoDBTable:
       Type: AWS::DynamoDB::Table

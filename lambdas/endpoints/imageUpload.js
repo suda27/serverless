@@ -1,9 +1,8 @@
 const Responses = require("../common/API_responses");
 import * as fileType from "file-type";
 import { v4 as uuid } from "uuid";
-import * as AWS from "aws-sdk";
+import s3 from "../common/S3";
 
-const s3 = new AWS.S3();
 const allowedMimes = ["image/jpeg", "image/png", "image/jpg"];
 
 exports.handler = async event => {
@@ -39,17 +38,9 @@ exports.handler = async event => {
 
     console.log(`writing image to bucket called ${key}`);
 
-    await s3
-      .putObject({
-        Body: buffer,
-        Key: key,
-        ContentType: body.mime,
-        Bucket: process.env.imageUploadBucket,
-        ACL: "public-read"
-      })
-      .promise();
+    await s3.write(buffer, key, process.env.imageUploadBucket, null, body.mime);
 
-    const url = `https://${process.env.imageUploadBucket}.s3.amazonaws.com/${key}`;
+    const url = await s3.getSignedUrl(process.env.imageUploadBucket, key, 60);
 
     return Responses._200({ imageURL: url });
   } catch (error) {

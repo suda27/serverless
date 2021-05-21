@@ -1,5 +1,5 @@
 ### List of commands that needs to be executed
 
-`npm i --save serveless-sync`
-`npm i --save serveless-webpack`
+`npm install --save serverless-s3-sync`
+`npm i --save serverless-webpack`
 `npm i --save webpack`

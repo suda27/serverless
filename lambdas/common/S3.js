@@ -6,7 +6,7 @@ const S3 = {
   async get(fileName, bucket) {
     const params = {
       Bucket: bucket,
-      Key: fileName,
+      Key: fileName
     };
 
     let data = await s3Client.getObject(params).promise();
@@ -23,11 +23,13 @@ const S3 = {
     return data;
   },
 
-  async write(data, fileName, bucket) {
+  async write(data, fileName, bucket , ACL, ContentType) {
     const params = {
       Bucket: bucket,
-      Body: JSON.stringify(data),
-      Key: fileName
+      Body: Buffer.isBuffer(data) ? data : JSON.stringify(data),
+      Key: fileName,
+      ACL,
+      ContentType
     };
 
     const newData = await s3Client.putObject(params).promise();
@@ -38,7 +40,15 @@ const S3 = {
       );
     }
     return newData;
+  },
+
+  async getSignedUrl(bucket, fileName, expirySeconds) {
+    return s3Client.getSignedUrl("getObject", {
+      Bucket: bucket,
+      Key: fileName,
+      Expires: expirySeconds
+    });
   }
 };
 
-module.exports = S3;
+export default S3;
