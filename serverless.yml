@@ -10,7 +10,7 @@ provider:
   environment:
     tableName: ${self:custom.tableName}
     bucketName: ${self:custom.bucketName}
-    imageUploadBucket:  ${self:custom.imageUploadBucket}
+    imageUploadBucket: ${self:custom.imageUploadBucket}
     region: ${self:provider.region}
   iamRoleStatements:
     - Effect: Allow
@@ -124,9 +124,18 @@ functions:
       - http:
           path: image-upload
           method: POST
-          cors: true        
+          cors: true
 
-
+  imageResize:
+    handler: lambdas/endpoints/imageResize.handler
+    events:
+      - s3:
+          bucket: ${self:custom.imageUploadBucket}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+          existing: true
+  
 resources:
   Resources:
     DemoBucketUpload:
@@ -137,8 +146,8 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.imageUploadBucket}
-         
-    
+        AccessControl: PublicRead
+
     MyDyanmoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -164,7 +173,3 @@ resources:
                   - apigateway.amazonaws.com
               Action:
                 - sts:AssumeRole
-
-
-                
-        
