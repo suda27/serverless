@@ -63,7 +63,11 @@ functions:
           path: get-user/{ID}
           method: GET
           cors: true
-          private: true
+          # private: true
+          authorizer:
+            arn: ${opt:acarn}
+            # arn: arn:aws:cognito-idp:us-east-1:699730620999:userpool/us-east-1_II8eyDXpo
+            
 
   getPlayerScore:
     handler: lambdas/endpoints/getPlayerScore.handler
