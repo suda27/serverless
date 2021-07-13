@@ -7,6 +7,9 @@ const bucket = process.env.bucketName;
 
 exports.handler = async event => {
   console.log("event", event);
+  console.log("Entring the function");
+  console.log("Changing line 1");
+  console.log("Changing line 2");
 
   if (!event.pathParameters || !event.pathParameters.fileName) {
     // failed without a fileName
