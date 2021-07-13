@@ -23,7 +23,7 @@ const S3 = {
     return data;
   },
 
-  async write(data, fileName, bucket , ACL, ContentType) {
+  async write(data, fileName, bucket, ACL, ContentType) {
     const params = {
       Bucket: bucket,
       Body: Buffer.isBuffer(data) ? data : JSON.stringify(data),
@@ -48,6 +48,18 @@ const S3 = {
       Key: fileName,
       Expires: expirySeconds
     });
+  },
+
+  async getAllFiles(bucket) {
+    const params = {
+      Bucket: bucket,
+      Delimiter: "/",
+      Prefix: "uploads/"
+    };
+
+    let data = await  s3Client.listObjects(params).promise();
+    console.log(data)
+    return data;
   }
 };
 

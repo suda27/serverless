@@ -97,6 +97,14 @@ functions:
           method: GET
           cors: true
 
+  getAllFiles:
+    handler: lambdas/endpoints/getAllFiles.handler
+    events:
+      - http:
+          path: get-all-files/
+          method: GET
+          cors: true        
+
   proxy:
     handler: lambdas/endpoints/proxy.handler
     events:
